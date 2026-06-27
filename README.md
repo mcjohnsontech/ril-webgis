@@ -24,7 +24,7 @@ All themed colors are CSS custom properties set via `[data-theme]` on
 never hardcode a color, they read the token.
 
 ## Setup
-
+... Omo na nothing oo
 ```bash
 npm install
 cp .env.example .env
