@@ -19,9 +19,9 @@ export function withSeverity(pothole: Omit<Pothole, "severity">): Pothole {
 }
 
 export const SEVERITY_COLOR: Record<PotholeSeverity, string> = {
-  low: "#5B8AA6",
-  medium: "#F0A33C",
-  high: "#E0483E",
+  low: "#5B9AD6",
+  medium: "#E8A83C",
+  high: "#E0543E",
 };
 
 export const SEVERITY_LABEL: Record<PotholeSeverity, string> = {

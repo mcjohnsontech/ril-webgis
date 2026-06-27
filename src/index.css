@@ -1,35 +1,89 @@
-@import url("https://fonts.googleapis.com/css2?family=Bevan&family=Roboto+Slab:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* ============ DARK THEME (default) — deep emerald-black ============ */
+:root,
+[data-theme="dark"] {
+  --bg-void: #06120e;
+  --bg-void-rgb: 6, 18, 14;
+  --bg-panel: rgba(14, 31, 24, 0.72);
+  --bg-panel-solid: #0e1f18;
+  --bg-elevated: rgba(20, 41, 31, 0.85);
+  --border-hairline: rgba(46, 204, 143, 0.16);
+  --border-hairline-strong: rgba(46, 204, 143, 0.32);
+
+  --text-primary: #eaf2ec;
+  --text-secondary: #8fab9b;
+  --text-tertiary: #5c7468;
+
+  --accent: #2ecc8f;
+  --accent-strong: #4ee3a8;
+  --accent-dim: rgba(46, 204, 143, 0.18);
+  --accent-text-on: #06120e;
+
+  --sev-low: #5b9ad6;
+  --sev-medium: #e8a83c;
+  --sev-high: #e0543e;
+
+  --gradient-bg: radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      rgba(46, 204, 143, 0.10),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #06120e 0%, #081a14 50%, #051210 100%);
+
+  --tile-filter: none;
+  --map-tile-url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+
+  --shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(46, 204, 143, 0.06) inset;
+}
+
+/* ============ LIGHT THEME — mint-white-green ============ */
+[data-theme="light"] {
+  --bg-void: #f4faf6;
+  --bg-void-rgb: 244, 250, 246;
+  --bg-panel: rgba(255, 255, 255, 0.72);
+  --bg-panel-solid: #ffffff;
+  --bg-elevated: rgba(255, 255, 255, 0.9);
+  --border-hairline: rgba(31, 168, 118, 0.18);
+  --border-hairline-strong: rgba(31, 168, 118, 0.34);
+
+  --text-primary: #0b2a1d;
+  --text-secondary: #4d6b5a;
+  --text-tertiary: #7e9889;
+
+  --accent: #1fa876;
+  --accent-strong: #168861;
+  --accent-dim: rgba(31, 168, 118, 0.14);
+  --accent-text-on: #ffffff;
+
+  --sev-low: #2f6fb0;
+  --sev-medium: #c4811f;
+  --sev-high: #c8402c;
+
+  --gradient-bg: radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      rgba(31, 168, 118, 0.12),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #f4faf6 0%, #eaf6ef 50%, #f4faf6 100%);
+
+  /* Desaturate + lighten the dark CARTO tiles isn't viable, so we swap the
+     tile URL entirely via JS in PotholeMap — this filter is a fallback only. */
+  --tile-filter: none;
+  --map-tile-url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
+  --shadow-panel: 0 8px 28px rgba(31, 168, 118, 0.12), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
 
 :root {
-  /* Surface */
-  --bg-void: #0b0d10;
-  --bg-panel: #13161bcc; /* glass, alpha applied here */
-  --bg-panel-solid: #13161b;
-  --border-hairline: #2a2f3899;
-  --border-hairline-strong: #3a4150;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
 
-  /* Text */
-  --text-primary: #eef0f3;
-  --text-secondary: #9aa3b0;
-  --text-tertiary: #5f6877;
-
-  /* Accent — hazard amber, ties to road-signage semantics */
-  --accent: #f0a33c;
-  --accent-dim: #f0a33c33;
-
-  /* Severity scale */
-  --sev-low: #5b8aa6;
-  --sev-medium: #f0a33c;
-  --sev-high: #e0483e;
-
-  /* Type */
-  --font-display: "Bevan", serif;
-  --font-body: "Roboto Slab", serif;
-
-  /* Layout */
-  --blur-glass: 18px;
-  --radius-panel: 14px;
+  --blur-glass: 20px;
+  --radius-panel: 16px;
   --radius-pill: 999px;
+
+  --transition-theme: 480ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -43,13 +97,14 @@ body,
   padding: 0;
   height: 100%;
   width: 100%;
-  background: var(--bg-void);
 }
 
 body {
   font-family: var(--font-body);
   color: var(--text-primary);
+  background: var(--gradient-bg);
   -webkit-font-smoothing: antialiased;
+  transition: background var(--transition-theme), color var(--transition-theme);
 }
 
 button {

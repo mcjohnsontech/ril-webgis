@@ -1,4 +1,5 @@
 import type { ConnectionStatus, Pothole } from "../types/pothole";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface StatsBarProps {
   potholes: Pothole[];
@@ -35,8 +36,17 @@ export function StatsBar({ potholes, status, isPulsing }: StatsBarProps) {
   return (
     <div className="stats-bar panel">
       <div className="brand">
-        <p className="brand-title">RIL</p>
-        <span className="brand-subtitle">Road Integrity Layer · Lagos</span>
+        <span className="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+            {/* Road-with-marker glyph: a route line with a defect point */}
+            <path d="M3 19c3-5 4-9 4-13M21 19c-3-5-4-9-4-13" strokeLinecap="round" />
+            <circle cx="12" cy="13" r="2.4" fill="currentColor" stroke="none" />
+          </svg>
+        </span>
+        <div className="brand-text">
+          <p className="brand-title">Road Integrity Layer</p>
+          <span className="brand-subtitle">Lagos Network Monitor</span>
+        </div>
       </div>
 
       <div className="stats-group">
@@ -54,9 +64,12 @@ export function StatsBar({ potholes, status, isPulsing }: StatsBarProps) {
         </div>
       </div>
 
-      <div className="live-pill">
-        <span className={dotClass} />
-        {statusLabel}
+      <div className="top-right-controls">
+        <div className="live-pill">
+          <span className={dotClass} />
+          {statusLabel}
+        </div>
+        <ThemeToggle />
       </div>
     </div>
   );

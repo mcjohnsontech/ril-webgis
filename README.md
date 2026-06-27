@@ -6,9 +6,22 @@ Dark, glass-paneled map dashboard that renders near-real-time road-failure
 ## Stack
 
 - Vite 5 + React 18 + TypeScript
-- Leaflet / react-leaflet (CARTO dark basemap, no API key required)
+- Leaflet / react-leaflet (CARTO basemaps — dark + light variants, swapped via theme)
 - Supabase JS client (anon key only — read-only frontend)
-- Bevan (display) + Roboto Slab (body)
+- Space Grotesk (display) + Inter (body)
+
+## Theme
+
+Dark/light toggle lives in the top-right of the stats bar. Preference persists
+in `localStorage` and respects OS preference on first visit.
+
+- **Dark** — deep emerald-black (`#06120E` base, `#2ECC8F` accent)
+- **Light** — mint-white-green (`#F4FAF6` base, `#1FA876` accent)
+
+All themed colors are CSS custom properties set via `[data-theme]` on
+`<html>` (see `src/index.css`). The map's tile layer swaps between CARTO's
+`dark_all` and `light_all` basemaps in sync with the toggle — components
+never hardcode a color, they read the token.
 
 ## Setup
 
@@ -45,15 +58,17 @@ src/
     supabaseClient.ts   — client init, fails loudly if env vars missing
     severity.ts         — pixel-area -> severity classification (tune thresholds here)
     mapIcons.ts          — custom SVG pin markers, cached per severity
+    ThemeContext.tsx      — dark/light theme provider + toggle logic
   hooks/
     usePotholes.ts       — baseline fetch + realtime subscription + connection status
   components/
-    PotholeMap.tsx        — Leaflet map, dark tiles, fly-to-new-report animation
-    StatsBar.tsx          — tracked/today/severe counts + live pulse indicator
-    FeedPanel.tsx          — scrollable list of reports, newest first
-    DetailCard.tsx          — click-through detail view with image
-    dashboard.css            — all glass panel styling
-  types/pothole.ts            — shared types
+    PotholeMap.tsx        — Leaflet map, theme-aware tiles, fly-to-new-report animation
+    StatsBar.tsx          — tracked/today/severe counts + live pulse + theme toggle
+    ThemeToggle.tsx        — the sun/moon switch
+    FeedPanel.tsx           — scrollable list of reports, newest first
+    DetailCard.tsx           — click-through detail view with image
+    dashboard.css             — all glass panel styling + animations
+  types/pothole.ts             — shared types
 ```
 
 ## Severity thresholds
@@ -70,4 +85,3 @@ Pi camera's known height/angle.
   or cursor pagination if `potholes_view` grows large.
 - No marker clustering — at city scale with many reports, consider
   `react-leaflet-cluster` if pins start overlapping.
-# ril-webgis

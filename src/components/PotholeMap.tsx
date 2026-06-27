@@ -3,15 +3,18 @@ import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import type { Pothole } from "../types/pothole";
 import { getPotholeIcon } from "../lib/mapIcons";
+import { useTheme } from "../lib/ThemeContext";
 
-// Lagos centroid — matches the center used in Henry's GIS workspace app for consistency.
+// Lagos centroid — matches the center used in Henry's other GIS workspace app for consistency.
 const LAGOS_CENTER: [number, number] = [6.5244, 3.3792];
 const DEFAULT_ZOOM = 12;
 
-// CARTO's dark basemap reads cleanly under the glass panel UI without a paid key.
-const DARK_TILE_URL =
-  "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
-const DARK_TILE_ATTRIBUTION =
+const TILE_URLS = {
+  dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+};
+
+const TILE_ATTRIBUTION =
   '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
 interface PotholeMapProps {
@@ -37,6 +40,8 @@ function FlyToOnInsert({ potholes, flyToId }: { potholes: Pothole[]; flyToId: st
 }
 
 export function PotholeMap({ potholes, onMarkerClick, flyToId }: PotholeMapProps) {
+  const { theme } = useTheme();
+
   return (
     <MapContainer
       center={LAGOS_CENTER}
@@ -44,7 +49,9 @@ export function PotholeMap({ potholes, onMarkerClick, flyToId }: PotholeMapProps
       zoomControl={false}
       style={{ height: "100%", width: "100%", background: "var(--bg-void)" }}
     >
-      <TileLayer url={DARK_TILE_URL} attribution={DARK_TILE_ATTRIBUTION} />
+      {/* Keying on theme forces react-leaflet to swap the tile source cleanly
+          rather than trying to diff URLs on an existing layer instance. */}
+      <TileLayer key={theme} url={TILE_URLS[theme]} attribution={TILE_ATTRIBUTION} />
       {potholes.map((pothole) => (
         <Marker
           key={pothole.id}
